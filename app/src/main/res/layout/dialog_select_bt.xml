@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".MenuActivity"
+    android:gravity="center"
+    tools:ignore="missingPrefix"
+    android:background="#F4F4F4">
+
+    <com.example.tathinkaccapp.ScalableAPI.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_width="1440"
+        app:scale_base_height="600">
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:scale_height="7"
+            app:scale_left="585"
+            app:scale_top="40"
+            app:scale_width="270"
+            android:background="#F96C69"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:scale_height="250"
+            app:scale_left="0"
+            app:scale_top="70"
+            app:scale_textsize="60"
+            app:scale_width="1440"
+            android:text="블루투스를 연결해주세요."
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/btn_LeftBle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:scale_height="126"
+            app:scale_left="130"
+            app:scale_top="350"
+            app:scale_textsize="60"
+            app:scale_width="510"
+            android:text="왼발"
+            android:textColor="#ffffff"
+            android:background="@drawable/menu_background_gray"/>
+
+
+        <TextView
+            android:id="@+id/btn_RightBle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:scale_height="126"
+            app:scale_left="800"
+            app:scale_top="350"
+            app:scale_textsize="60"
+            app:scale_width="510"
+            android:text="오른발"
+            android:textColor="#ffffff"
+            android:background="@drawable/menu_background_gray"/>
+
+    </com.example.tathinkaccapp.ScalableAPI.ScalableLayout>
+</LinearLayout>
