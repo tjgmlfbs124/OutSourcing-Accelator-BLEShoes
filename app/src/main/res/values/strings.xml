@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">We, with</string>
+    <string name="ble_scanning">블루투스를 찾는중 입니다...</string>
+    <string name="ble_scanned">블루투스를 연결해주세요.</string>
 </resources>

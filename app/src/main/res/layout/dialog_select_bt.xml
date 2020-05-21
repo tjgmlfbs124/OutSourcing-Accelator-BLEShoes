@@ -26,6 +26,7 @@
             android:background="#F96C69"/>
         
         <TextView
+            android:id="@+id/BleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -65,6 +66,16 @@
             android:text="오른발"
             android:textColor="#ffffff"
             android:background="@drawable/menu_background_gray"/>
+
+        <ProgressBar
+            android:id="@+id/progress_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:scale_width="200"
+            app:scale_height="200"
+            app:scale_left="620"
+            app:scale_top="300"
+            />
 
     </com.example.tathinkaccapp.ScalableAPI.ScalableLayout>
 </LinearLayout>

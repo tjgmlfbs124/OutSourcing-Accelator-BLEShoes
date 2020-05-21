@@ -9,12 +9,17 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.tathinkaccapp.BLE.DeviceManager;
@@ -27,16 +32,28 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContentResolverCompat;
+import androidx.core.content.ContextCompat;
 
 public class BluetoothDialog extends BottomSheetDialogFragment{
     private Context mContext;
     private DeviceManager mDeviceManager = new DeviceManager();
     TextView leftButton;
     TextView rightButton;
+    TextView bleTxtView;
     private static final long SCAN_PERIOD = 10000; //10 seconds
     private int MY_PERMISSIONS_REQUEST_LOCATION = 2000;
     private Handler mHandler;
     private boolean mScanning;
+
+    Drawable menu_bg_drawable_gray;
+    Drawable menu_bg_drawable_blue;
+
+    ProgressBar scanningProg;
+
+    private boolean scannedL = false;
+    private boolean scannedR = false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,6 +64,20 @@ public class BluetoothDialog extends BottomSheetDialogFragment{
         rightButton = (TextView)view.findViewById(R.id.btn_RightBle);
         leftButton.setOnClickListener(mButtonClickListener);
         rightButton.setOnClickListener(mButtonClickListener);
+
+        //@ckw 배경 drawable 불러오기
+        menu_bg_drawable_gray = (Drawable) ContextCompat.getDrawable(this.mContext, R.drawable.menu_background_gray);
+        menu_bg_drawable_blue = (Drawable) ContextCompat.getDrawable(this.mContext, R.drawable.menu_background_blue);
+
+        //@ckw 시작시 버튼, 텍스트 세팅
+        bleTxtView = (TextView)view.findViewById(R.id.BleText);
+        scanningProg = (ProgressBar)view.findViewById(R.id.progress_circle);
+
+        //bleTxtView.setVisibility(View.INVISIBLE);
+        bleTxtView.setText(R.string.ble_scanning);
+
+        leftButton.setVisibility(View.INVISIBLE);
+        rightButton.setVisibility(View.INVISIBLE);
 
         mHandler = new Handler();
         if (!mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -134,9 +165,25 @@ public class BluetoothDialog extends BottomSheetDialogFragment{
 
             Log.i("seo", "Device : " + result.getDevice().getName());
             if(result.getDevice().getName()!=null) {
-                if(result.getDevice().getName().contains("SHOE MONITOR")) {
+                /*if(result.getDevice().getName().contains("SHOE MONITOR")) {
                     Log.i("seo", "Device : " + result.getDevice().getName());
                     mDeviceManager.addDevice(result.getDevice());
+                }*/
+                if(result.getDevice().getName().contains("SHOE MONITOR L")) {
+                    scannedL = true;
+                    mDeviceManager.addDevice(result.getDevice());
+                    Log.i("@ckw", "L scanned");
+                } else if(result.getDevice().getName().contains("SHOE MONITOR R")) {
+                    scannedR = true;
+                    mDeviceManager.addDevice(result.getDevice());
+                    Log.i("@ckw", "R scanned");
+                }
+
+                if(scannedL == true && scannedR == true) {
+                    scanningProg.setVisibility(View.INVISIBLE);
+                    leftButton.setVisibility(View.VISIBLE);
+                    rightButton.setVisibility(View.VISIBLE);
+                    bleTxtView.setText(R.string.ble_scanned);
                 }
             }
         }
@@ -166,6 +213,7 @@ public class BluetoothDialog extends BottomSheetDialogFragment{
                         if(mDeviceManager.getDevice("L") != null){
                             (MenuActivity.mBluetoothBridge).mService.connect(mDeviceManager.getDevice("L").getAddress());
                             builder.show();
+                            leftButton.setBackground(menu_bg_drawable_blue);
                         }
                         else{
                             Toast.makeText(mContext,"모듈을 찾을수 없습니다.",Toast.LENGTH_SHORT).show();
@@ -176,6 +224,7 @@ public class BluetoothDialog extends BottomSheetDialogFragment{
                         if(mDeviceManager.getDevice("R") != null){
                             (MenuActivity.mBluetoothBridge).mService.connect(mDeviceManager.getDevice("R").getAddress());
                             builder.show();
+                            rightButton.setBackground(menu_bg_drawable_blue);
                         }
                         else{
                             Toast.makeText(mContext,"모듈을 찾을수 없습니다.",Toast.LENGTH_SHORT).show();

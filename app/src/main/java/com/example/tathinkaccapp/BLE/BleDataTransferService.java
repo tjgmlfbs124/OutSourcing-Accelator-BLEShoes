@@ -407,6 +407,7 @@ public class BleDataTransferService extends Service {
             return;
         }
         mBluetoothGatt.disconnect();
+        mBluetoothGatt2.disconnect();
         // mBluetoothGatt.close();
     }
 
