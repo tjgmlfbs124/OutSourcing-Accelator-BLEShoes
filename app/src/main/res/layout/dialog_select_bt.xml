@@ -24,7 +24,7 @@
             app:scale_top="40"
             app:scale_width="270"
             android:background="#F96C69"/>
-
+        
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

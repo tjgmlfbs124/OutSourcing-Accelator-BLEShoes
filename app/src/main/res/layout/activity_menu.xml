@@ -17,18 +17,29 @@
         app:scale_base_height="2560">
 
         <TextView
-            android:id="@+id/btn_test"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center|left"
+            android:gravity="bottom|left"
             android:textColor="#606060"
             android:textStyle="bold"
-            app:scale_height="374"
+            app:scale_height="187"
             app:scale_left="110"
             app:scale_textsize="70"
             app:scale_top="0"
             app:scale_width="1220"
-            android:text="똑신\nDDOK Sin"/>
+            android:text="위드"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top|left"
+            android:textColor="#606060"
+            app:scale_height="187"
+            app:scale_left="110"
+            app:scale_textsize="70"
+            app:scale_top="187"
+            app:scale_width="1220"
+            android:text="we, with"/>
 
         <Switch
             android:id="@+id/bleSwitch"
@@ -45,43 +56,87 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:scale_height="598"
+            app:scale_height="500"
             app:scale_left="110"
             app:scale_top="374"
             app:scale_width="590"
             app:scale_textsize="50"
             android:padding="40px"
             android:background="@drawable/menu_background_white"
-            android:text="Walk"
+            android:text="오늘"
             android:textColor="#777777"/>
 
-        <com.github.lzyzsd.circleprogress.DonutProgress
-            android:id="@+id/walk_donut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:scale_height="430"
-            app:scale_left="192"
-            app:scale_top="500"
-            app:scale_width="430"
-            app:donut_unfinished_stroke_width="25px"
-            app:donut_finished_stroke_width="10px"
-            app:donut_text_color="#000000"
-            app:donut_text_size="100px"
-            app:donut_unfinished_color="#E8E8E8"
-            app:donut_finished_color="#F96C69"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="bottom|left"
+            app:scale_height="200"
+            app:scale_left="420"
+            app:scale_top="524"
+            app:scale_width="280"
+            app:scale_textsize="70"
+            android:paddingLeft="15px"
             android:background="@drawable/menu_background_white"
-            android:padding="40px"
-            android:text="Moving"
-            android:textColor="#777777"
-            app:scale_height="667"
+            android:text="걸음"
+            android:textColor="#777777"/>
+        <TextView
+            android:id="@+id/txt_walk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            app:scale_height="200"
+            app:scale_left="110"
+            app:scale_top="524"
+            app:scale_width="310"
+            app:scale_textsize="170"
+            android:background="@drawable/menu_background_white"
+            android:text="0"
+            android:textColor="#000000"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/menu_background_red"
+            app:scale_height="1080"
             app:scale_left="741"
-            app:scale_textsize="50"
             app:scale_top="374"
             app:scale_width="590" />
+
+        <TextView
+            android:id="@+id/txt_info_01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            app:scale_height="200"
+            app:scale_left="773"
+            app:scale_textsize="50"
+            app:scale_top="525"
+            app:scale_width="540"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/txt_info_02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            app:scale_height="200"
+            app:scale_left="773"
+            app:scale_textsize="50"
+            app:scale_top="750"
+            app:scale_width="540"
+            android:text=""/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/gif_rabbit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:scale_height="330"
+            app:scale_left="800"
+            app:scale_top="1050"
+            app:scale_width="470"
+            android:background="#ec6865"/>
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/movingChart"
@@ -90,64 +145,122 @@
             app:scale_height="480"
             app:scale_left="761"
             app:scale_textsize="50"
-            app:scale_top="524"
+            app:scale_top="950"
             app:scale_width="550"
-            />
+            android:visibility="gone"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:scale_height="410"
+            app:scale_height="535"
             app:scale_left="110"
-            app:scale_top="1026"
+            app:scale_top="910"
             app:scale_width="590"
             app:scale_textsize="50"
             android:padding="40px"
             android:background="@drawable/menu_background_white"
-            android:text="Speed (ms)"
+            android:text="운동량"
             android:textColor="#777777"/>
 
-        <TextView
-            android:id="@+id/txt_speed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:scale_height="120"
-            app:scale_left="110"
-            app:scale_top="1200"
-            app:scale_width="590"
-            app:scale_textsize="100"
-            android:background="@drawable/menu_background_white"
-            android:text="0"
-            android:textColor="#000000"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_fork_00"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_svg_fork_02"
+            app:scale_height="103"
+            app:scale_left="170"
+            app:scale_top="1090"
+            app:scale_width="69"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/menu_background_white"
-            android:padding="40px"
-            android:text="Calorie (Kcal)"
-            android:textColor="#777777"
-            app:scale_height="507"
-            app:scale_left="741"
-            app:scale_textsize="50"
-            app:scale_top="1087"
-            app:scale_width="590" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_fork_01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_svg_fork_01"
+            app:scale_height="103"
+            app:scale_left="270"
+            app:scale_top="1090"
+            app:scale_width="69"/>
 
-        <TextView
-            android:id="@+id/txt_calorie"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_fork_02"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:scale_height="120"
-            app:scale_left="741"
-            app:scale_top="1320"
-            app:scale_width="590"
-            app:scale_textsize="100"
-            android:background="@drawable/menu_background_white"
-            android:text="0"
-            android:textColor="#000000"/>
+            android:layout_height="match_parent"
+            app:scale_height="103"
+            app:scale_left="370"
+            app:scale_top="1090"
+            app:scale_width="69"
+            app:srcCompat="@drawable/ic_svg_fork_02" />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_fork_03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_svg_fork_01"
+            app:scale_height="103"
+            app:scale_left="470"
+            app:scale_top="1090"
+            app:scale_width="69"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_fork_04"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_svg_fork_02"
+            app:scale_height="103"
+            app:scale_left="570"
+            app:scale_top="1090"
+            app:scale_width="69"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_fork_05"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_svg_fork_02"
+            app:scale_height="103"
+            app:scale_left="170"
+            app:scale_top="1227"
+            app:scale_width="69"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_fork_06"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_svg_fork_02"
+            app:scale_height="103"
+            app:scale_left="270"
+            app:scale_top="1227"
+            app:scale_width="69"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_fork_07"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_svg_fork_02"
+            app:scale_height="103"
+            app:scale_left="370"
+            app:scale_top="1227"
+            app:scale_width="69"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_fork_08"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_svg_fork_02"
+            app:scale_height="103"
+            app:scale_left="470"
+            app:scale_top="1227"
+            app:scale_width="69"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_fork_09"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_svg_fork_02"
+            app:scale_height="103"
+            app:scale_left="570"
+            app:scale_top="1227"
+            app:scale_width="69"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -156,30 +269,50 @@
             app:scale_left="110"
             app:scale_top="1494"
             app:scale_width="590"
+            app:scale_textsize="65"
+            android:text="우리아이, 걸음습관"
+            android:background="@drawable/menu_background_white"
+            android:gravity="center|top"
+            android:paddingTop="20px"
+            android:textColor="#777777"/>
+
+        <com.github.lzyzsd.circleprogress.DonutProgress
+            android:id="@+id/probability_donut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:scale_height="380"
+            app:scale_left="206"
+            app:scale_top="1696"
+            app:scale_width="380"
+            app:donut_unfinished_stroke_width="25px"
+            app:donut_finished_stroke_width="10px"
+            app:donut_text_color="#000000"
+            app:donut_text_size="70px"
+            app:donut_unfinished_color="#E8E8E8"
+            app:donut_finished_color="#F96C69"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/menu_background_white"
+            app:scale_height="160"
+            app:scale_left="741"
             app:scale_textsize="50"
-            android:background="@drawable/menu_background_red"
-            android:textColor="#ffffff"/>
+            app:scale_top="1480"
+            app:scale_width="590" />
 
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/positChart"
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/stepChart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:scale_height="580"
-            app:scale_left="195"
-            app:scale_top="1540"
-            app:scale_width="420"
-            android:background="#f4f4f4"
-            />
+            android:background="@drawable/menu_background_white"
+            app:scale_height="140"
+            app:scale_left="760"
+            app:scale_textsize="50"
+            app:scale_top="1490"
+            app:scale_width="540" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_posture"
-            app:scale_height="610"
-            app:scale_left="195"
-            app:scale_top="1530"
-            app:scale_width="420"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -190,24 +323,30 @@
             app:scale_width="590"
             app:scale_textsize="50"
             android:padding="40px"
-            android:background="@drawable/menu_background_white"
-            android:text="Probability"
-            android:textColor="#777777"/>
+            android:background="@drawable/menu_background_white"/>
 
-        <com.github.lzyzsd.circleprogress.DonutProgress
-            android:id="@+id/probability_donut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:scale_height="323"
-            app:scale_left="880"
-            app:scale_top="1800"
-            app:scale_width="323"
-            app:donut_unfinished_stroke_width="25px"
-            app:donut_finished_stroke_width="10px"
-            app:donut_text_color="#000000"
-            app:donut_text_size="70px"
-            app:donut_unfinished_color="#E8E8E8"
-            app:donut_finished_color="#F96C69"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_left_foot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:scale_height="474"
+            app:scale_left="765"
+            app:scale_top="1685"
+            app:scale_width="267"
+            app:srcCompat="@drawable/ic_svg_left_foot"
+            android:background="#c4c2c2"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_right_foot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:scale_height="474"
+            app:scale_left="1036"
+            app:scale_top="1685"
+            app:scale_width="267"
+            app:srcCompat="@drawable/ic_svg_right_foot"
+            android:background="#c4c2c2"/>
+
 
         <TextView
             android:id="@+id/btn_start"
@@ -223,7 +362,5 @@
             android:text="START"
             android:textStyle="bold"
             android:textColor="#ffffff"/>
-
-
     </com.example.tathinkaccapp.ScalableAPI.ScalableLayout>
 </LinearLayout>

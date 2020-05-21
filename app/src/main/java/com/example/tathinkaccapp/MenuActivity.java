@@ -1,7 +1,9 @@
 package com.example.tathinkaccapp;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -11,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -22,6 +25,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.tathinkaccapp.BLE.BleDataTransferService;
 import com.example.tathinkaccapp.BLE.BluetoothBridge;
 import com.example.tathinkaccapp.Dialog.BluetoothDialog;
@@ -29,47 +34,58 @@ import com.example.tathinkaccapp.Util.LocationManage;
 import com.example.tathinkaccapp.Util.MpChart;
 import com.example.tathinkaccapp.Util.Stopwatch;
 import com.github.lzyzsd.circleprogress.DonutProgress;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 
 public class MenuActivity extends AppCompatActivity {
     public static BluetoothAdapter mBluetoothAdapter;
     public static BluetoothLeScanner mBluetoothLeScanner;
     public static BluetoothBridge mBluetoothBridge = BluetoothBridge.getInstance();
-    private boolean isStart = false;
-    private DonutProgress walkProgress, probability_donut;
+    private AppCompatImageView[] forkList = new AppCompatImageView[10];
+    private AppCompatImageView left_foot, right_foot, img_animation;
+    private DonutProgress probability_donut;
     private Switch bleSwitch;
-    private TextView btn_start, txt_speed, txt_calorie;
+    private TextView btn_start, txt_walk, txt_info_01, txt_info_02;
     private Stopwatch stopWatch = new Stopwatch();
-    private MpChart mMovingChart, mPositChart;
-    private LineChart movingChart, positChart;
+    private MpChart mStepChart;
+    private BarChart stepChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        bleSwitch = (Switch)findViewById(R.id.bleSwitch);
-        walkProgress = (DonutProgress)findViewById(R.id.walk_donut);
         probability_donut = (DonutProgress)findViewById(R.id.probability_donut);
         btn_start = (TextView)findViewById(R.id.btn_start);
-        bleSwitch.setOnCheckedChangeListener(new SwitchListener());
+        txt_walk = (TextView)findViewById(R.id.txt_walk);
+        txt_info_01 = (TextView)findViewById(R.id.txt_info_01);
+        txt_info_02 = (TextView)findViewById(R.id.txt_info_02);
+
+        left_foot = (AppCompatImageView)findViewById(R.id.img_left_foot);
+        right_foot = (AppCompatImageView)findViewById(R.id.img_right_foot);
+        left_foot.setBackgroundColor(Color.parseColor("#00ec6865"));
+        right_foot.setBackgroundColor(Color.parseColor("#00ec6865"));
         btn_start.setOnClickListener(new ButtonClickListener());
-        txt_speed = (TextView)findViewById(R.id.txt_speed);
-        txt_calorie = (TextView)findViewById(R.id.txt_calorie);
+        for(int i = 0; i < forkList.length; i++){
+            int getID = this.getResources().getIdentifier("img_fork_0"+i,"id",this.getPackageName());
+            forkList[i] = (AppCompatImageView)findViewById(getID);
+        }
+        img_animation = (AppCompatImageView) findViewById(R.id.gif_rabbit);
+        GlideDrawableImageViewTarget gifImage = new GlideDrawableImageViewTarget(img_animation);
 
         bluetoothDevicePairingInit();
         LocationManage locationManage = new LocationManage(MenuActivity.this);
         if(!locationManage.isLocation())
             locationManage.setEnableLocation();
-        movingChart = (LineChart)findViewById(R.id.movingChart);
-        positChart = (LineChart)findViewById(R.id.positChart);
 
+        // chart init
+        stepChart = (BarChart)findViewById(R.id.stepChart);
+        mStepChart = new MpChart(stepChart, getApplicationContext());
+        mStepChart.chartInit();
+        mStepChart.setWalkEntry(0, 0);
 
-        mPositChart = new MpChart(positChart);
-        mPositChart.chartInit();
-
-        mMovingChart = new MpChart(movingChart);
-        mMovingChart.chartInit();
-
+        // stopwatch init
+        bleSwitch = (Switch)findViewById(R.id.bleSwitch);
+        bleSwitch.setOnCheckedChangeListener(new SwitchListener());
         stopWatch.setListener(new StopwatchListener());
     }
 
@@ -90,9 +106,44 @@ public class MenuActivity extends AppCompatActivity {
         @Override
         public void onTick(String time) {
             btn_start.setText(time);
+            getRealTimeSpeed();
+        }
+    }
+    int spd_counting = 0;
+    int spd_leftStep = 0;
+    int spd_rightStep = 0;
+    void getRealTimeSpeed(){
+        if(txt_info_02.getText().toString().equals("")){
+            txt_info_01.setText("속도를 체크중입니다.." + (3-spd_counting));
+        }
+        if(spd_counting > 2){
+            int distance_km = (int)((spd_counting+spd_leftStep) * 0.4);
+            float ms = (float)distance_km/spd_counting;
+            if(ms > 0.8){
+                txt_info_01.setText("우리아이는 지금 \n'토끼' 와 같은 속도로 \n걷고있어요.");
+                txt_info_02.setText("'토끼'는 100m 가는데 \n약 20초가 걸려요!");
+                Glide.with(this).load(R.drawable.ic_gif_rabbit).into(img_animation);
+            }
+            else if(ms <= 0.8 && ms > 0.4){
+                txt_info_01.setText("우리아이는 지금 \n'거북이' 와 같은 속도로 \n걷고있어요.");
+                txt_info_02.setText("'거북이'는 10m 가는데 \n약 33초가 걸려요!");
+                Glide.with(this).load(R.drawable.ic_gif_turtle).into(img_animation);
+            }
+            else if(ms <= 0.4){
+                txt_info_01.setText("아이가 자고있어요");
+                txt_info_02.setText("움직임이 감지되지 않습니다.");
+                img_animation.setImageResource(R.drawable.ic_img_animal);
+            }
+            spd_leftStep = 0;
+            spd_rightStep = 0;
+            spd_counting = 0;
+        }
+        else{
+            spd_counting++;
         }
     }
 
+    private boolean isStart = false;
     class ButtonClickListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {
@@ -150,10 +201,6 @@ public class MenuActivity extends AppCompatActivity {
     };
 
     public class checkSvmToStep {
-        double L_min = 0.4;
-        double L_max = 2.5;
-        double R_min = 0.4;
-        double R_max = 2.5;
         int leftStep = 0;
         int rightStep = 0;
         boolean L_flag = false;
@@ -164,11 +211,7 @@ public class MenuActivity extends AppCompatActivity {
 
         public boolean isLeftStep(double svm){
             tempLeftSVM = svm;
-            if(L_min > svm && svm > 0.65) L_min = svm;
-            if(L_max < svm && svm < 2.5) L_max = svm;
-            double overPer = ((L_max-L_min)*0.88)+L_min;
-//            Log.i("seo","svm : " + svm + "L_min : " + L_min + " L_max : " + L_max + " L_90% : " + overPer);
-            if(svm > overPer){
+            if(svm > 2){ // @SEO 미세조절을 시도하려면 숫자 바꾸기
                 if(L_flag){
                     L_flag = !L_flag;
                     return true;
@@ -184,11 +227,7 @@ public class MenuActivity extends AppCompatActivity {
         }
         public boolean isRightStep(double svm){
             tempRightSVM = svm;
-            if(R_min > svm && svm > 0.65) R_min = svm;
-            if(R_max < svm && svm < 2.5) R_max = svm;
-            double overPer = ((L_max-L_min)*0.88)+L_min;
-            Log.i("seo","svm : " + svm + "R_min : " + R_min + " R_max : " + R_max + " L_90% : " + overPer);
-            if(svm > overPer){
+            if(svm > 2){ // @SEO 미세조절을 시도하려면 숫자 바꾸기
                 if(R_flag){
                     R_flag = !R_flag;
                     return true;
@@ -289,6 +328,7 @@ public class MenuActivity extends AppCompatActivity {
 
                     double svm = Math.sqrt((acc_x_data*acc_x_data)+ (acc_y_data*acc_y_data) + (acc_z_data*acc_z_data));
                     if(isStep.isRightStep(svm)){
+                        spd_rightStep++;
                         isStep.rightStep++;
                     }
                 }
@@ -347,6 +387,7 @@ public class MenuActivity extends AppCompatActivity {
 
                     double svm = Math.sqrt((acc_x_data*acc_x_data)+ (acc_y_data*acc_y_data) + (acc_z_data*acc_z_data));
                     if(isStep.isLeftStep(svm)){
+                        spd_leftStep++;
                         isStep.leftStep++;
                     }
                 }
@@ -387,29 +428,58 @@ public class MenuActivity extends AppCompatActivity {
         isStep.tempRightSVM = 0;
         isStep.leftStep = 0;
         isStep.rightStep = 0;
+        for (int i = 0; i < forkList.length; i++) {
+            forkList[i].setColorFilter(Color.parseColor("#E8E8E8"));
+        }
     }
+
+    String isGIF = "";
+    private void playGIF(String val){
+        if(isGIF == ""){
+            if(val == "rabbit") Glide.with(this).load(R.drawable.ic_gif_rabbit).into(img_animation);
+            else Glide.with(this).load(R.drawable.ic_gif_turtle).into(img_animation);
+            isGIF = val;
+            Log.i("seo","[1] isGif : " + isGIF);
+        }else{
+            if(isGIF == val) return ;
+            else{
+                if(val == "rabbit") Glide.with(this).load(R.drawable.ic_gif_rabbit).into(img_animation);
+                else Glide.with(this).load(R.drawable.ic_gif_turtle).into(img_animation);
+                isGIF = val;
+            }
+        }
+    }
+
 
     private void setData(){
         // 그래프
-        mMovingChart.addWalkEntry(isStep.tempLeftSVM + isStep.tempRightSVM);
-        mPositChart.addIsWorkEntry(isStep.leftStep, isStep.rightStep);
+        mStepChart.setWalkEntry(isStep.tempLeftSVM, isStep.tempRightSVM);
 
         // 걸음
-        walkProgress.setDonut_progress(String.valueOf(isStep.leftStep+isStep.rightStep));
-
-        // 스피드 (speed(m/s) = distance / second)
-        int distance_km = (int)((isStep.leftStep+isStep.rightStep) * 0.4);
-        int sec = (int)stopWatch.getTotalTimeElapsed() / 1000;
-        float ms = (float)distance_km/sec;
-        txt_speed.setText(String.format("%.2f", ms));
+        txt_walk.setText(isStep.leftStep+isStep.rightStep+"");
 
         // 칼로리 oxygen(mL) = 3.5 * 3.8(MET) * kg * min
+        int sec = (int)stopWatch.getTotalTimeElapsed() / 1000;
         double oxygenML = 3.5 * 3.8 * 70 * (sec / 60.0000);
         double Kcal = (oxygenML / 1000.000) * 5;
-        txt_calorie.setText(String.format("%.3f", Kcal));
+        try{
+            if((Kcal/2) <= forkList.length)
+                forkList[(int)Kcal].setColorFilter(Color.parseColor("#ec6865"));
+        }catch (Exception e){}
 
         // probability_donut
         probability_donut.setDonut_progress(String.valueOf(Math.abs(isStep.leftStep-isStep.rightStep)));
+
+        // probability_foot
+        if(isStep.leftStep * 2 > 255 || isStep.rightStep * 2 > 255 )
+            return;
+        String l_alpha = Integer.toString(isStep.leftStep*2,16).length() == 1 ? "0" + Integer.toString(isStep.leftStep*2,16) : Integer.toString(isStep.leftStep*2,16);
+        String r_alpha = Integer.toString(isStep.rightStep*2,16).length() == 1 ? "0" + Integer.toString(isStep.rightStep*2,16) : Integer.toString(isStep.rightStep*2,16);
+        String l_color = "#" + l_alpha + "ec6865";
+        String r_color = "#" + r_alpha + "ec6865";
+        left_foot.setBackgroundColor(Color.parseColor(l_color));
+        right_foot.setBackgroundColor(Color.parseColor(r_color));
+
     }
 
     @Override

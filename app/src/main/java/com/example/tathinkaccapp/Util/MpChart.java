@@ -1,137 +1,85 @@
 package com.example.tathinkaccapp.Util;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
-import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.DefaultAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-
 import java.util.ArrayList;
 
-public class MpChart implements OnChartValueSelectedListener {
-    public LineChart mLineChart;
+public class MpChart{
+    public BarChart mBarChart;
+    public Context mContext;
 
-    public MpChart(LineChart lineChart){
-        mLineChart = lineChart;
+    public MpChart(BarChart barChart, Context context){
+        mBarChart = barChart;
+        mContext = context;
     }
 
     public void chartInit(){
-        mLineChart.setOnChartValueSelectedListener(this);
-        // enable description text
-        mLineChart.getDescription().setEnabled(false);
-        // enable touch gestures
-        mLineChart.setTouchEnabled(false);
-        // enable scaling and dragging
-        mLineChart.setDragEnabled(false);
-        mLineChart.setScaleEnabled(true);
-        mLineChart.setDrawGridBackground(false);
-        // if disabled, scaling can be done on x- and y-axis separately
-        mLineChart.setPinchZoom(false);
-        // set an alternative background color
-        mLineChart.setBackgroundColor(Color.parseColor("#f4f4f4"));
-        LineData data = new LineData();
-        data.setValueTextColor(Color.WHITE);
-        // add empty data
-        mLineChart.setData(data);
-        mLineChart.setDescription(null);    // Hide the description
-        mLineChart.getAxisLeft().setDrawLabels(false);
-        mLineChart.getXAxis().setDrawAxisLine(false);
-        mLineChart.getAxisLeft().setDrawAxisLine(false);
-        mLineChart.setViewPortOffsets(0f, 0f, 0f, 0f);
-        mLineChart.getAxisRight().setDrawLabels(true);
-        mLineChart.getXAxis().setDrawLabels(false);
-        mLineChart.getAxisLeft().setDrawGridLines(false);
-        mLineChart.getXAxis().setDrawGridLines(false);
-        mLineChart.getLegend().setEnabled(false);   // Hide the legend
-        YAxis rightAxis = mLineChart.getAxisRight();
-        rightAxis.setEnabled(false);
+        mBarChart.setDrawBarShadow(false);
+        mBarChart.setDrawValueAboveBar(true);
+        mBarChart.getDescription().setEnabled(false);
+        mBarChart.setMaxVisibleValueCount(60);
+        mBarChart.setPinchZoom(false);
+        mBarChart.setDrawGridBackground(false);
+        XAxis xAxis = mBarChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawLabels(false);
+        xAxis.setGranularity(1f);
+        xAxis.setLabelCount(7);
+        xAxis.setCenterAxisLabels(false);
+        YAxis leftAxis = mBarChart.getAxisLeft();
+        leftAxis.setLabelCount(8, false);
+        leftAxis.setDrawLabels(false);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setSpaceTop(15f);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setAxisMaximum(3f);
+        leftAxis.setEnabled(false);
+
+        YAxis rightAxis = mBarChart.getAxisRight();
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setLabelCount(8, false);
+        rightAxis.setSpaceTop(15f);
+        rightAxis.setAxisMinimum(0f);
+        rightAxis.setAxisMaximum(3f);
+        rightAxis.setDrawLabels(false);
+        mBarChart.setViewPortOffsets(0f, 0f, 0f, 0f);
+        mBarChart.getAxisLeft().setDrawGridLines(false);
+        mBarChart.getXAxis().setDrawGridLines(false);
+        mBarChart.getLegend().setEnabled(false);
     }
 
-
-    private boolean moveToLastEntry = true;
-
-    private LineDataSet createSet() {
-
-        LineDataSet set = new LineDataSet(null, "Dynamic Data");
-        set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColor(Color.parseColor("#F96C69"));
-        set.setDrawCircles(false);
-        set.setDrawFilled(true);
-        set.setLineWidth(2f);
-        set.setFillColor(Color.parseColor("#F96C69"));
-        set.setDrawValues(false);
-        return set;
-    }
-
-    public void addWalkEntry(double svm) {
-        LineData data = mLineChart.getData();
-        if (data != null) {
-            ILineDataSet set = data.getDataSetByIndex(0);
-            // set.addEntry(...); // can be called as well
-            if (set == null) {
-                set = createSet();
-                data.addDataSet(set);
-            }
-            data.setValueFormatter(new DefaultAxisValueFormatter(0));
-            data.addEntry(new Entry(set.getEntryCount(), (float) svm), 0);
-            data.notifyDataChanged();
-            // let the chart know it's data has changed
-            mLineChart.notifyDataSetChanged();
-            // limit the number of visible entries
-            mLineChart.setVisibleXRangeMaximum(20);
-            // lineChart.setVisibleYRange(30, AxisDependency.LEFT);
-            if (moveToLastEntry) {
-                // move to the latest entry
-                mLineChart.moveViewToX(data.getEntryCount());
-            }
-            if(data.getEntryCount() > 300){
-                data.removeDataSet(0);
-            }
+    public void setWalkEntry(double leftStep, double rightStep){
+        mBarChart.notifyDataSetChanged();
+        mBarChart.invalidate();
+        ArrayList<BarEntry> values = new ArrayList<>();
+        values.add(new BarEntry(0, (float)leftStep));
+        values.add(new BarEntry(1, (float)rightStep));
+        BarDataSet set1;
+        if (mBarChart.getData() != null && mBarChart.getData().getDataSetCount() > 0) {
+            set1 = (BarDataSet) mBarChart.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+            set1.setDrawValues(false);
+        } else {
+            set1 = new BarDataSet(values, null);
+            set1.setDrawIcons(false);
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
+            BarData data = new BarData(dataSets);
+            data.setValueTextSize(10f);
+            data.setBarWidth(0.9f);
+            mBarChart.setData(data);
+            set1.setDrawValues(false);
         }
-    }
-
-    public void addIsWorkEntry(float leftPer, float rightPer) {
-        LineData data = mLineChart.getData();
-        if (data != null) {
-            data.removeDataSet(0);
-            ILineDataSet set = data.getDataSetByIndex(0);
-            // set.addEntry(...); // can be called as well
-            if (set == null) {
-                set = createSet();
-                data.addDataSet(set);
-            }
-            mLineChart.getData().getDataSetByIndex(0);
-            data.setValueFormatter(new DefaultAxisValueFormatter(0));
-            data.addEntry(new Entry(set.getEntryCount(), leftPer), 0);
-            data.addEntry(new Entry(set.getEntryCount(), rightPer), 0);
-            data.notifyDataChanged();
-            // let the chart know it's data has changed
-            mLineChart.notifyDataSetChanged();
-            if (moveToLastEntry) {
-//                // move to the latest entry
-                mLineChart.moveViewToX(data.getEntryCount());
-            }
-        }
-    }
-
-
-
-    @Override
-    public void onValueSelected(Entry e, Highlight h) {
-        Log.i("Entry selected", e.toString());
-    }
-    @Override
-    public void onNothingSelected() {
-        Log.i("Nothing selected", "Nothing selected.");
     }
 }

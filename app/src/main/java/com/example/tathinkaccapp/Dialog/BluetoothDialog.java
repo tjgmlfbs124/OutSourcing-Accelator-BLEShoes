@@ -55,8 +55,6 @@ public class BluetoothDialog extends BottomSheetDialogFragment{
         final BluetoothManager bluetoothManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
         MenuActivity.mBluetoothAdapter = bluetoothManager.getAdapter();
         MenuActivity.mBluetoothLeScanner = (MenuActivity.mBluetoothAdapter).getBluetoothLeScanner();
-        Log.i("seo","MenuActivity.mBluetoothAdapter : " + MenuActivity.mBluetoothAdapter);
-        Log.i("seo","MenuActivity.mBluetoothLeScanner : " + MenuActivity.mBluetoothLeScanner);
         // Checks if Bluetooth is supported on the device.
         if (MenuActivity.mBluetoothAdapter == null) {
             Toast.makeText(mContext, "Bluetooth Low Energy not supported", Toast.LENGTH_SHORT).show();
@@ -78,12 +76,10 @@ public class BluetoothDialog extends BottomSheetDialogFragment{
                     ScanFilter beaconFilter = new ScanFilter.Builder()
                             .build();
                     ArrayList<ScanFilter> filters = new ArrayList<ScanFilter>();
-                    //filters.add(beaconFilter);
 
                     ScanSettings settings = new ScanSettings.Builder()
                             .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
                             .build();
-
 
                     // Stops scanning after a pre-defined scan period.
                     mHandler.postDelayed(new Runnable() {
@@ -96,7 +92,6 @@ public class BluetoothDialog extends BottomSheetDialogFragment{
                     }, SCAN_PERIOD);
 
                     mScanning = true;
-                    //mBluetoothAdapter.startLeScan(mLeScanCallback);
                     (MenuActivity.mBluetoothLeScanner).startScan(filters, settings, mScanCallback);
                 }
                 catch (Exception e){
@@ -105,7 +100,6 @@ public class BluetoothDialog extends BottomSheetDialogFragment{
 
             } else {
                 mScanning = false;
-                //mBluetoothAdapter.stopLeScan(mLeScanCallback);
                 (MenuActivity.mBluetoothLeScanner).stopScan(mScanCallback);
             }
         }
@@ -133,16 +127,10 @@ public class BluetoothDialog extends BottomSheetDialogFragment{
         }
 
         private void processResult(ScanResult result) {
-//            Log.i("seo", "New LE Device: " + result.getDevice().getName() + " @ " + result.getRssi());
-
             /*
              * Create a new beacon from the list of obtains AD structures
              * and pass it up to the main thread
              */
-            /*TemperatureBeacon beacon = new TemperatureBeacon(result.getScanRecord(),
-                    result.getDevice().getAddress(),
-                    result.getRssi());
-            mHandler.sendMessage(Message.obtain(null, 0, beacon));*/
 
             Log.i("seo", "Device : " + result.getDevice().getName());
             if(result.getDevice().getName()!=null) {
@@ -151,7 +139,6 @@ public class BluetoothDialog extends BottomSheetDialogFragment{
                     mDeviceManager.addDevice(result.getDevice());
                 }
             }
-            //addDevice(result.getDevice(), result.getRssi(), result.getScanRecord().getBytes(), 1);
         }
     };
 
