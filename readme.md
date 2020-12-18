@@ -7,6 +7,7 @@
 - 본 프로젝트는 안드로이드 개발을 담당
 
 ## 개발개요
+- Application Name : 똑3
 - Develop Tool : Android Studio
 - compileSdk Version : 29
 - minSDK Version : 21
@@ -15,4 +16,6 @@
 
 
 ## 개발 사진
-<img src="https://user-images.githubusercontent.com/25836808/102573748-790d0a00-4132-11eb-9cdd-1ea18b9b9ec0.png" width="40%">
+<img src="https://user-images.githubusercontent.com/25836808/102574401-03a23900-4134-11eb-88b8-94c2e7f908d0.png" width="30%">
+<img src="https://user-images.githubusercontent.com/25836808/102574375-f422f000-4133-11eb-8512-eaddc95a4d52.png" width="30%">
+<img src="https://user-images.githubusercontent.com/25836808/102573748-790d0a00-4132-11eb-9cdd-1ea18b9b9ec0.png" width="30%">
