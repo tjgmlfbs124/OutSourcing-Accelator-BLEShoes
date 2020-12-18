@@ -15,4 +15,4 @@
 
 
 ## 개발 사진
-![정상 실행화면](https://user-images.githubusercontent.com/25836808/102573748-790d0a00-4132-11eb-9cdd-1ea18b9b9ec0.png)
+![정상 실행화면](https://user-images.githubusercontent.com/25836808/102573748-790d0a00-4132-11eb-9cdd-1ea18b9b9ec0.png){:width="30%"}
